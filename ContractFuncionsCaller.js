@@ -7,7 +7,7 @@ async function main() {
     const provider = new hre.ethers.JsonRpcProvider(process.env.API_URL);
     const userWallet = new hre.ethers.Wallet(process.env.PRIVATE_KEY, provider);
 
-    const lockAddress = "0x379a5c23A6aaaA4bB2ba954d1A993a4b64A6Bcaf";
+    const lockAddress = process.env.CONTRACT_ADDRESS;
     const Lock = new hre.ethers.Contract(
         lockAddress,
         abi,
