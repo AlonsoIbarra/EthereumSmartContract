@@ -213,6 +213,15 @@ contract PoliBitBaseContractERC20 is IERC20 {
     }
 
     /**
+     * @notice Checks if the caller is the owner of the contract
+     * @dev Compares the message sender address with the stored owner address
+     * @return bool Returns true if the caller is the owner, false otherwise
+     */
+    function isOwner() public virtual returns (bool) {
+        return (msg.sender == _owner);
+    }
+
+    /**
      * @dev Internal function to perform token transfers
      * @param from The address tokens are transferred from
      * @param to The address tokens are transferred to
@@ -243,9 +252,9 @@ contract PoliBitBaseContractERC20 is IERC20 {
      * @param amount The amount of tokens to create
      */
     function _mint(address account, uint256 amount) internal virtual {
-        require(_owner == msg.sender, "ERC20: Only owner can mint tokens.");
+        // require(_owner == msg.sender, "ERC20: Only owner can mint tokens.");
         require(account != address(0), "ERC20: mint to the zero address");
-        require(_totalSupply + amount <= _maxTokens, "ERC20: Exceeds max supply");
+        // require(_totalSupply + amount <= _maxTokens, "ERC20: Exceeds max supply");
         
         _beforeTokenTransfer(address(0), account, amount);
         
