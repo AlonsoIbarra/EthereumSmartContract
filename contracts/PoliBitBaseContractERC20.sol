@@ -175,8 +175,7 @@ contract PoliBitBaseContractERC20 is IERC20 {
      * @return A boolean indicating whether the transfer was successful
      */
     function transferFrom(address from, address to, uint256 amount) public virtual override returns (bool) {
-        address spender = msg.sender;
-        _spendAllowance(from, spender, amount);
+        _spendAllowance(from, to, amount);
         _transfer(from, to, amount);
         return true;  
     }
@@ -187,8 +186,7 @@ contract PoliBitBaseContractERC20 is IERC20 {
      * @param _addedValue The amount to increase the allowance by
      * @return A boolean indicating whether the operation was successful
      */
-    function increaceAllowance(address spender, uint256 _addedValue) public virtual returns (bool) {
-        address owner = msg.sender;
+    function increaceAllowance(address owner, address spender, uint256 _addedValue) public virtual returns (bool) {
         uint256 currentAllowance = _allowances[owner][spender];
         _approve(owner, spender, currentAllowance + _addedValue);
         return true;
@@ -200,8 +198,7 @@ contract PoliBitBaseContractERC20 is IERC20 {
      * @param _value The amount to decrease the allowance by
      * @return A boolean indicating whether the operation was successful
      */
-    function decreaseAllowance(address spender, uint256 _value) public virtual returns (bool) {
-        address owner = msg.sender;
+    function decreaseAllowance(address owner, address spender, uint256 _value) public virtual returns (bool) {
         uint256 currentAllowance = _allowances[owner][spender];
 
         require(currentAllowance >= _value, "ERC20: decreased allowance below zero.");
@@ -271,6 +268,7 @@ contract PoliBitBaseContractERC20 is IERC20 {
      * @param amount The amount of tokens to burn
      */
     function _burn(address account, uint256 amount) internal virtual {
+        require(_owner == msg.sender, "ERC20: Only owner can burn tokens.");
         require(account != address(0), "ERC20: Burn from zero address");
         
         _beforeTokenTransfer(account, address(0), amount);
@@ -297,7 +295,7 @@ contract PoliBitBaseContractERC20 is IERC20 {
      */
     function _approve(address owner, address spender, uint256 amount) internal virtual {
         require(owner != address(0), "ERC20: aprove from zero address.");
-        require(spender != address(0), "ERC20: aprove from zero address.");
+        require(spender != address(0), "ERC20: aprove to zero address.");
         
         _allowances[owner][spender] = amount;
         
