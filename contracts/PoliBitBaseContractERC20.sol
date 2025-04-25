@@ -175,6 +175,7 @@ contract PoliBitBaseContractERC20 is IERC20 {
      * @return A boolean indicating whether the transfer was successful
      */
     function transferFrom(address from, address to, uint256 amount) public virtual override returns (bool) {
+        require(_owner == msg.sender, "ERC20: Only owner can call transferFrom function.");
         _spendAllowance(from, to, amount);
         _transfer(from, to, amount);
         return true;  

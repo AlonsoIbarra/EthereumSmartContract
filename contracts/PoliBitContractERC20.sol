@@ -9,7 +9,7 @@ import "contracts/PoliBitBaseContractERC20.sol";
  * @dev ERC20 token contract that extends PoliBitBaseContractERC20
  * @notice This contract provides PoliBitBaseContractERC20 functionality and exposes mint function.
  */
-contract PoliBitContractERC20D26 is PoliBitBaseContractERC20 {
+contract PoliBitContractERC20 is PoliBitBaseContractERC20 {
 
     /**
      * @dev Storage for addresses that hold tokens
