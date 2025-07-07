@@ -18,12 +18,21 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 // Go to https://hardhat.org/config/ to learn more
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.8.28",
+  solidity: {
+    version: "0.8.28",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200  // Low runs value for deployment optimization
+      }
+    }
+  },
   networks: {
     amoy: {
       url: API_URL,
       accounts: [`0x${PRIVATE_KEY}`],
-      chainId: 80002
+      chainId: 80002,
+      gasPrice: 35000000000,
     }
   }
 };
