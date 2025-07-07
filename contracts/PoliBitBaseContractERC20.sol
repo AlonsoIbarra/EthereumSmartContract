@@ -60,6 +60,12 @@ contract PoliBitBaseContractERC20 is IERC20 {
     // Contract token symbol
     string private _symbol;
 
+    // Contract owner Company
+    string private _company;
+
+    // Contract token value currency
+    string private _currency;
+
     // Contract owner address
     address public _owner;
 
@@ -68,12 +74,14 @@ contract PoliBitBaseContractERC20 is IERC20 {
      * @param _nameP The name of the token
      * @param _symbolP The symbol of the token
      */
-    constructor(string memory _nameP, string memory _symbolP, uint _tokenValueP, uint _maxTokensP) {
+    constructor(string memory _nameP, string memory _symbolP, string memory _companyP, string memory _currencyP, uint _tokenValueP, uint _maxTokensP) {
        _owner = msg.sender; // Set deployer as owner
        _name = _nameP;
        _symbol = _symbolP;
        _tokenValue = _tokenValueP;
        _maxTokens = _maxTokensP;
+       _company = _companyP;
+       _currency = _currencyP;
     }
 
     /**
@@ -85,19 +93,35 @@ contract PoliBitBaseContractERC20 is IERC20 {
     }
 
     /**
-     * @dev Returns the symbol of the token
-     * @return The token symbol
+     * @dev Returns the token value
+     * @return The token value
      */
     function value() public view virtual returns (uint256) {
         return _tokenValue;
     }
 
     /**
-     * @dev Returns the symbol of the token
-     * @return The token symbol
+     * @dev Returns the limit of tokens to mint
+     * @return The max token value
      */
     function maxTokens() public view virtual returns (uint256) {
         return _maxTokens;
+    }
+
+    /**
+     * @dev Returns the company token owner
+     * @return The company name
+     */
+    function company() public view virtual returns (string memory) {
+        return _company;
+    }
+
+    /**
+     * @dev Returns the currency token value
+     * @return The currency
+     */
+    function currency() public view virtual returns (string memory) {
+        return _currency;
     }
 
     /**
@@ -187,7 +211,7 @@ contract PoliBitBaseContractERC20 is IERC20 {
      * @param _addedValue The amount to increase the allowance by
      * @return A boolean indicating whether the operation was successful
      */
-    function increaceAllowance(address owner, address spender, uint256 _addedValue) public virtual returns (bool) {
+    function increaseAllowance(address owner, address spender, uint256 _addedValue) public virtual returns (bool) {
         uint256 currentAllowance = _allowances[owner][spender];
         _approve(owner, spender, currentAllowance + _addedValue);
         return true;
@@ -232,7 +256,7 @@ contract PoliBitBaseContractERC20 is IERC20 {
         
         uint256 fromBalance = _balances[from];
         
-        require(fromBalance >= amount, "ERC20: transfer amount exceds balance");
+        require(fromBalance >= amount, "ERC20: transfer amount exceeds balance");
 
         unchecked {
             _balances[from] = fromBalance - amount;
@@ -276,16 +300,16 @@ contract PoliBitBaseContractERC20 is IERC20 {
         
         uint accountBalance = _balances[account];  
         
-        require(accountBalance >= amount, "ERC20: Burn Exceds Balance");
+        require(accountBalance >= amount, "ERC20: Burn exceeds Balance");
         
         unchecked {
             _balances[account] = accountBalance - amount;
         }
         _totalSupply -= amount; 
+
+        emit Transfer(account, address(0), amount); 
         
-        emit Transfer(account, address(0), amount);
-        
-        _afterTokenTransfer(address(0), account, amount);
+        _afterTokenTransfer(account, address(0), amount);
     }
 
     /**
@@ -295,8 +319,8 @@ contract PoliBitBaseContractERC20 is IERC20 {
      * @param amount The amount of tokens allowed to spend
      */
     function _approve(address owner, address spender, uint256 amount) internal virtual {
-        require(owner != address(0), "ERC20: aprove from zero address.");
-        require(spender != address(0), "ERC20: aprove to zero address.");
+        require(owner != address(0), "ERC20: approve from zero address.");
+        require(spender != address(0), "ERC20: approve to zero address.");
         
         _allowances[owner][spender] = amount;
         
@@ -312,7 +336,7 @@ contract PoliBitBaseContractERC20 is IERC20 {
     function _spendAllowance(address owner, address spender, uint256 amount) internal virtual {
         uint256 currentAllowance = allowance(owner, spender);
         if (currentAllowance != type(uint256).max) {
-            require(currentAllowance >= amount, "ERC20: spending exceds allowance");
+            require(currentAllowance >= amount, "ERC20: spending exceeds allowance");
             unchecked {
                 _approve(owner, spender, currentAllowance - amount);
             }
