@@ -7,6 +7,8 @@ module.exports = buildModule("PoliBitTokenModule", (m) => {
   // Define the parameters for the PoliBitContractERC20 token
   const name = m.getParameter("name", "PoliBitToken");
   const symbol = m.getParameter("symbol", "POLSD3");
+  const company = m.getParameter("company", "Company Name");
+  const currency = m.getParameter("currency", "MXN");
   const tokenValue = m.getParameter("tokenValue", 270000);
   const maxTokens = m.getParameter("maxTokens", 15000000000000000000); // 1 full token = 1,000,000,000,000,000,000 wei (10^18 decimals)
 
@@ -14,6 +16,8 @@ module.exports = buildModule("PoliBitTokenModule", (m) => {
   const poliBitToken = m.contract("PoliBitContractERC20", [
     name,
     symbol,
+    company,
+    currency,
     tokenValue,
     maxTokens
   ]);
